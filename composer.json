@@ -1,0 +1,14 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Shop\\Cart\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.12"
+    },
+    "require": {
+        "ramsey/uuid": "^4.7",
+        "moneyphp/money": "^4.5"
+    }
+}
