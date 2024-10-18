@@ -6,34 +6,53 @@ namespace Shop\Cart;
 
 use Money\Money;
 use Shop\Cart\Product\Product;
+use Shop\Cart\Product\ProductCollection;
 
 /**
- * @template T of Product
+ * @template T of Product<mixed>
  */
 final readonly class Cart
 {
     /**
-     * @param array<int, T> $products
+     * @param ProductCollection<T> $products
      */
     public function __construct(
-        public array $products
+        public ProductCollection $products
     ) {}
 
     /**
-     * @param T $product
+     * @param non-empty-array<int, T> $products
      * @return self<T>
      */
-    public function add(Product $product): self
+    public function add(array $products): self
     {
         return new self(
-            array_merge($this->products, [$product]),
+            new ProductCollection(
+                array_merge(iterator_to_array($this->products, false), $products)
+            ),
+        );
+    }
+
+    /**
+     * @param non-empty-string $uuid
+     * @return self<T>
+     */
+    public function remove(string $uuid): self
+    {
+        $products = $this->products;
+        unset($products[$uuid]);
+
+        return new self(
+            new ProductCollection(
+                iterator_to_array($products, false)
+            ),
         );
     }
 
     public function totalAmount(): string
     {
         return array_reduce(
-            $this->products,
+            iterator_to_array($this->products),
             $this->calculateTotalPrice(),
             Money::RUB(0),
         )->getAmount();

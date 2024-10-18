@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shop\Cart\Product;
 
 use Money\Money;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @template T
@@ -12,13 +13,14 @@ use Money\Money;
 abstract class Product
 {
     /**
-     * @param non-empty-string $id
+     * @param UuidInterface $uuid
      * @param non-empty-string $name
      * @param Money $price
      */
     public function __construct(
-        public string $id,
+        public UuidInterface $uuid,
         public string $name,
-        public Money $price
+        public Money $price,
+        public int $qty,
     ) {}
 }
